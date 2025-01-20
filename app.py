@@ -1,39 +1,40 @@
-import streamlit as st # Import python packages
+import streamlit as st  # Import Streamlit
+from snowflake.snowpark import Session  # Import Snowpark Session
 from snowflake.snowpark.context import get_active_session
-from snowflake.snowpark import Session
-
 from snowflake.core import Root
-
 import pandas as pd
 import json
 
+# Access Snowflake credentials from Streamlit secrets
+snowflake_user = st.secrets["user"]
+snowflake_password = st.secrets["password"]
+snowflake_account = st.secrets["account"]
 
-# Access Snowflake credentials
-snowflake_user = st.secrets["SNOWFLAKE_USER"]
-snowflake_password = st.secrets["SNOWFLAKE_PASSWORD"]
-snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
-
-# Access service parameters
+# Access service parameters from Streamlit secrets
 cortex_search_database = st.secrets["CORTEX_SEARCH_DATABASE"]
 cortex_search_schema = st.secrets["CORTEX_SEARCH_SCHEMA"]
 cortex_search_service = st.secrets["CORTEX_SEARCH_SERVICE"]
 
-pd.set_option("max_colwidth",None)
+# Set pandas display options
+pd.set_option("max_colwidth", None)
 
-### Default Values
-NUM_CHUNKS = 3 # Num-chunks provided as context. Play with this to check how it affects your accuracy
+# Default values for context (adjust if needed)
+NUM_CHUNKS = 3  # Play with this to check its impact on your results
 
-
-# Example: Create a Snowflake session
+# Snowflake session connection parameters
 connection_parameters = {
-    "account": snowflake_account,
-    "user": snowflake_user,
-    "password": snowflake_password,
-    # Add other parameters if needed
+    "account": snowflake_account,  # Snowflake account (no region needed if default)
+    "user": snowflake_user,        # Snowflake username
+    "password": snowflake_password,  # Snowflake password
+    "database": cortex_search_database,
+    "schema": cortex_search_schema,
+    "service": cortex_search_service
+    # Add other parameters if needed (role, warehouse, etc.)
 }
+
+# Create a Snowflake session using Snowpark
 session = Session.builder.configs(connection_parameters).create()
 
-st.write("Snowflake session created successfully!")
 
 # columns to query in the service
 COLUMNS = [
