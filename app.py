@@ -43,10 +43,8 @@ COLUMNS = [
     "category"
 ]
 
-session = get_active_session()
+#session = get_active_session()
 root = Root(session)                         
-
-svc = root.databases[cortex_search_database].schemas[cortex_search_schema].cortex_search_services[cortex_search_service]
    
 ### Functions
      
