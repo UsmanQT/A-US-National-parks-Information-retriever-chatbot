@@ -133,8 +133,8 @@ def complete(myquestion):
 
 def main():
     
-    st.title(f":speech_balloon: Chat Document Assistant with Snowflake Cortex")
-    st.write("This is the list of documents you already have and that will be used to answer your questions:")
+    st.title(f":national_park: Parkopedia: Answers for adventurers, explorers, and dreamers.")
+    st.write("These are the context documents that will be used to answer your questions:")
     docs_available = session.sql("ls @docs").collect()
     list_docs = []
     for doc in docs_available:
